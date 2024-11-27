@@ -1,0 +1,20 @@
+{
+  "name": "S e r v z' I t",
+  "short_name": "S e r v z' I t",
+  "icons": [
+    {
+      "src": "android-chrome-192x192.png",  // Make sure this icon has a black background
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "android-chrome-512x512.png",  // Make sure this icon has a black background
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",  // Set the splash screen background color to black
+  "theme_color": "#000000"         // Set the theme color to black
+}

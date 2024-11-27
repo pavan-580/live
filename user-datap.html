@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  
+  <title>S e r v z' I t</title>
+  <style>
+    /* General body styling */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+      margin: 0;
+      background-color: black;
+      background-image: url('../nn.jpg'); /* Add your image URL here */
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Navbar styles */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      font-size: 18px;
+    }
+
+    .navbar a:hover {
+      border-radius: 5px;
+      color: orangered;
+    }
+
+    /* Container styles */
+    .container {
+      text-align: center;
+      z-index: 10;
+    }
+
+    /* Button styling */
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 15px;
+    }
+
+    button:active {
+      background-color: #45a049;
+    }
+
+    /* Loading screen styling */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+      z-index: -1;
+      opacity: 1;
+      animation: fadeOut 8s forwards;
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* Text animation */
+    #dynamic-text {
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+      animation: write 5s ease-in-out forwards;
+    }
+
+    @keyframes write {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* WhatsApp icon styling */
+    #whatsapp-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: transparent;
+      color: white;
+      padding: 1px;
+      border-radius: 20%;
+      cursor: pointer;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      height: 25px;
+    }
+
+    #whatsapp-icon:hover {
+      background-color: #000000;
+    }
+    
+    #join {
+      position: fixed;
+      bottom: 3px;
+      left: 20px;
+      background-color: transparent;
+      color: white;
+      padding: 1px;
+      border-radius: 20%;
+      cursor: pointer;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      height: 25px;
+    }
+
+    #join:hover {
+      background-color: #000000;
+    }
+
+    /* Form styling */
+    #form-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgb(0, 0, 0);
+      padding: 50px;
+      border-radius: 10px;
+      display: none;
+      z-index: 1000;
+      width: 320px;
+    }
+
+    #form-popup input,
+    #form-popup textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #form-popup button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #form-popup button:active {
+      background-color: #45a049;
+    }
+
+    .sign-in-info {
+      display: none;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .whatsapp-icon {
+      position: fixed;
+      bottom: 35px;
+      right: 35px;
+      z-index: 1000;
+      background-color: transparent;
+      border-radius: 80%;
+      cursor: none !important;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      visibility: hidden;  /* Initially hidden */
+      opacity: 0;         /* Initially transparent */
+      transition: visibility 0.3s, opacity 0.3s ease;
+  }
+  .whatsapp-icon img {
+      width: 150px; /* Adjust size as needed */
+      transition: transform 0.3s ease;
+  }
+  .whatsapp-icon:hover {
+      transform: scale(1.0); /* Zoom in on hover */
+  }
+  .whatsapp-icon:hover img {
+      transform: scale(.9); /* Slight zoom in on the icon itself */
+  }
+  #close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    background-color: transparent;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+  
+  #close-button:hover {
+    color: grey;
+  }
+  #ns {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  #ns span {
+    display: inline-block;
+    animation: vibrate-text 1s infinite;
+  }
+  
+  @keyframes vibrate-text {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-3px);
+    }
+    50% {
+      transform: translateX(3px);
+    }
+    75% {
+      transform: translateX(-3px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    
+    .fadeing {
+    
+          
+            opacity: 0;
+            position: relative;
+            animation: fadeMove 1.5s forwards 1.5s; /* 3s fade-in, 3s delay */
+        }
+
+        @keyframes fadeMove {
+            0% {
+                opacity: 0;
+                top: -20px; /* Start position above final position */
+            }
+            100% {
+                opacity: 1;
+                top: 0px; /* Final position downwards */
+            }
+        }
+    .fadeingg {
+		
+            
+            opacity: 0;
+            position: relative;
+            animation: fadeMove 1.5s forwards .1s; /* 3s fade-in, 3s delay */
+        }
+
+        @keyframes fadeMove {
+            0% {
+                opacity: 0;
+                top: 20px; /* Starting position */
+            }
+            100% {
+                opacity: 1;
+                top: 0; /* Final position */
+            }
+        }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <a href="https://servzit-c0rv46c.gamma.site/" class="fadeing">About Us</a> <!-- Link to history page -->
+    <p style="color:orangered; font-size:20px; opacity:0; animation:fadeIn 3s forwards 3s;">S e r v z' I t</p>
+    <a href="https://servzit-x0lx1tn.gamma.site/" class="fadeing">Explore</a></div>
+    
+  </div>
+
+  <!-- WhatsApp Icon -->
+  <a href="https://wa.me/+91 9603008474" target="_blank" id="whatsapp-icon" >
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="50" height="50">
+    </a>
+
+  <!-- Container with Button -->
+  <div class="container fadeing">
+    <button id="join">Join Us</button>
+  </div>
+
+  <!-- Form Popup -->
+  <div id="form-popup">
+    <button id="close-button">X</button>
+    <h2>Join Us</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required><br>
+      <input type="email" placeholder="Your Email" required><br>
+      <textarea placeholder="Your Message" rows="5"></textarea><br>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <svg width="100vw" height="100vh" xmlns="http://www.w3.org/2000/svg">
+      <text id="dynamic-text" x="50%" y="80%" font-family="Arial, sans-serif" font-size="60" fill="none" stroke="red" stroke-width="2" font-weight="bold" text-anchor="middle" alignment-baseline="middle">
+        S e r v z' I t
+      </text>
+    </svg>
+  </div>
+
+  <script>
+    // Open Form Popup
+    document.getElementById("join").onclick = function() {
+      document.getElementById("form-popup").style.display = "block";
+    }
+
+    // Close Form Popup
+    document.getElementById("close-button").onclick = function() {
+      document.getElementById("form-popup").style.display = "none";
+    }
+  </script>
+</body>
+</html>

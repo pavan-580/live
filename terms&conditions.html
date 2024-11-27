@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  
+  <title>S e r v z' I t</title>
+  <style>
+    /* General body styling */
+    body {
+    font-family: Arial, sans-serif;
+    color: #fff;
+    
+    background-color: black;
+    background-image: url('../nn.jpg');
+    background-size: cover;
+    background-position: center;
+    overflow-y: auto; /* Enable scrolling for content */
+    }
+
+    /* Navbar styles */
+    .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 1);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    
+    z-index: 1000;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      font-size: 18px;
+    }
+
+    .navbar a:hover {
+      border-radius: 5px;
+      color: orangered;
+    }
+
+    /* Container styles */
+    .container {
+      text-align: center;
+      z-index: 10;
+    }
+
+    /* Button styling */
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 15px;
+    }
+    .button1 {
+        font-size: 15px;
+        cursor: pointer;
+        background-color: grey;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        max-height: auto;
+        
+        
+        display: flex;
+        
+      }
+
+    button:active {
+      background-color: #45a049;
+    }
+
+    /* Loading screen styling */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+      z-index: -1;
+      opacity: 1;
+      animation: fadeOut 8s forwards;
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* Text animation */
+    #dynamic-text {
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+      animation: write 5s ease-in-out forwards;
+    }
+
+    @keyframes write {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* WhatsApp icon styling */
+    #whatsapp-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: transparent;
+      color: white;
+      padding: 1px;
+      border-radius: 20%;
+      cursor: pointer;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      height:25px;
+    }
+
+    #whatsapp-icon:hover {
+      background-color: #000000;
+    }
+    
+    #join {
+      position: fixed;
+      bottom: 3px;
+      left: 20px;
+      background-color: transparent;
+      color: white;
+      padding: 1px;
+      border-radius: 20%;
+      cursor: pointer;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      height:25px;
+    }
+
+    #join:hover {
+      background-color: #000000;
+    }
+
+    /* Form styling */
+    #form-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgb(0, 0, 0);
+      padding: 50px;
+      border-radius: 10px;
+      display: none;
+      z-index: 1000;
+      width: 320px;
+    }
+
+    #form-popup input,
+    #form-popup textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #form-popup button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #form-popup button:active {
+      background-color: #45a049;
+    }
+
+    .sign-in-info {
+      display: none;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .whatsapp-icon {
+      position: fixed;
+      bottom: 35px;
+      right: 35px;
+      z-index: 1000;
+      background-color:transparent;
+      border-radius: 80%;
+      cursor: none !important;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      visibility: hidden;  /* Initially hidden */
+      opacity: 0;         /* Initially transparent */
+      transition: visibility 0.3s, opacity 0.3s ease;
+  }
+  .whatsapp-icon img {
+      width: 150px; /* Adjust size as needed */
+      transition: transform 0.3s ease;
+  }
+  .whatsapp-icon:hover {
+      transform: scale(1.0); /* Zoom in on hover */
+  }
+  .whatsapp-icon:hover img {
+      transform: scale(.9); /* Slight zoom in on the icon itself */
+  }
+  #close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    background-color: transparent;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+  
+  #close-button:hover {
+    color: grey;
+  }
+  #start-recording {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  #start-recording span {
+    display: inline-block;
+    animation: vibrate-text 1s infinite;
+  }
+  
+  @keyframes vibrate-text {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-3px);
+    }
+    50% {
+      transform: translateX(3px);
+    }
+    75% {
+      transform: translateX(-3px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    
+    .fadeing {
+    
+          
+            opacity: 0;
+            position: relative;
+            animation: fadeMove 1.5s forwards 1.5s; /* 3s fade-in, 3s delay */
+        }
+
+        @keyframes fadeMove {
+            0% {
+                opacity: 0;
+                top: -20px; /* Start position above final position */
+            }
+            100% {
+                opacity: 1;
+                top: 0px; /* Final position downwards */
+            }
+        }
+    .fadeingg {
+		
+            
+            opacity: 0;
+            position: relative;
+            animation: fadeMove 1.5s forwards .1s; /* 3s fade-in, 3s delay */
+        }
+
+        @keyframes fadeMove {
+            0% {
+                opacity: 0;
+                top: 20px; /* Starting position */
+            }
+            100% {
+                opacity: 1;
+                top: 0; /* Final position */
+            }
+        }
+
+        main {
+            max-width: auto;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: white;
+          }
+          
+          .search-section, .results-section {
+            margin-top: 250px;
+            
+            
+          }
+          
+          h2 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: #f0f0f0;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+          }
+          
+          .form-group {
+            margin-bottom: 15px;
+          }
+          
+          label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+          }
+          
+          input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #222;
+            color: #fff;
+          }
+          
+          input::placeholder {
+            color: #888;
+          }
+          
+          .btn-search {
+            padding: 10px 20px;
+            background: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+          }
+          
+          .btn-search:hover {
+            background: #0056b3;
+          }
+          
+          .user-container {
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+          }
+          
+          .data-item {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+          }
+          
+          .data-item p {
+            margin: 5px 0;
+          }
+.search-section,
+  .results-section {
+    margin-top: 20px; /* Ensure consistent spacing */
+  }
+
+          
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <a href="https://servzit-c0rv46c.gamma.site/" >About Us</a> <!-- Link to history page -->
+    <p style="color:orangered; font-size:20px; ">S e r v z' I t</p>
+    <a href="https://servzit-x0lx1tn.gamma.site/" >Explore</a></div>
+    
+  </div>
+
+  <!-- WhatsApp Icon -->
+  <a href="https://wa.me/+91 9603008474" target="_blank" id="whatsapp-icon" >
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"  width="35px" />
+     <!-- Use WhatsApp icon (add FontAwesome or any icon library) -->
+  </a>
+  
+  
+
+
+  
+  <!-- Main Content -->
+  
+ <main style="margin-bottom:50px; margin-top:50px !important;">
+    <section class="terms-container" style=" background-color: #000; padding: 5px; border-radius: 15px; box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2); color: white;">
+      <h1 style="font-family: 'Times New Roman', Times, serif; text-align: center; font-size: 24px; margin-top:55px">Terms and Conditions</h1>
+      <p style="text-align: center; font-size: 18px; font-style: italic; color: #d3d3d3;"><strong>Effective Date:</strong> [ <span style="color:rgb(255, 0, 0)">20/11/2024</span>  ]</p>
+  
+      <h2 style="font-size: 24px; color: #ffb;">1. Introduction</h2>
+      <p style="font-size: 18px; line-height: 1.6;">Welcome to Servz'it! By accessing or using the Servz'it website and mobile application (collectively, "Servz'it"), you agree to be bound by these Terms and Conditions, our Privacy Policy, and any other policies applicable to the use of the Services. If you do not agree to these terms, please do not use Servz'it.</p>
+  
+      <h2 style="font-size: 24px; color: #ffb;">2. Description of Services</h2>
+      <p style="font-size: 18px; line-height: 1.6;">Servz'it connects users with local service providers through our platform. We act as an intermediary to help you find service providers, but we do not provide these services directly. The actual services are provided by third-party service providers (Service Professionals), and we do not guarantee the quality, performance, or delivery of these services.</p>
+  
+      <h2 style="font-size: 24px; color: #ffb;">3. Account Creation</h2>
+      <p style="font-size: 18px; line-height: 1.6;">To access certain features of Servz'it, you may be required to create an account. By registering, you agree to provide accurate and complete information and to keep your account details confidential. You are responsible for all activities that occur under your account.</p>
+  
+      <h2 style="font-size: 24px; color: #ffb;">4. User Content</h2>
+      <p style="font-size: 18px; line-height: 1.6;">By using Servz'it, you may post reviews, feedback, or other content. You agree not to post any unlawful, offensive, or inappropriate content. Servz'it reserves the right to remove any content that violates these Terms and Conditions.</p>
+  
+      <h2 style="font-size: 24px; color: #ffb;">5. Booking Process</h2>
+      <p style="font-size: 18px; line-height: 1.6;">When you request a service, you are engaging with the service provider and agreeing to the terms set by the provider.</p>
+      <ul style="font-size: 18px; line-height: 1.6; margin-left: 10px;">
+          <li><strong>Booking Confirmation:</strong> A booking is confirmed once you receive an acknowledgment from the service provider.</li>
+          <li><strong>Cancellation Policy:</strong> You may cancel a booking before confirmation at no charge. Cancellations after confirmation may incur a fee, as determined by the service provider.</li>
+      </ul>
+  
+      <h2 style="font-size: 24px; color: #ffb;">6. Fees and Payment</h2>
+      <p style="font-size: 18px; line-height: 1.6;">Servz'it charges a service fee from providers to display  their contact information to get connect with targeted buyers directly without traffic. Service fees, taxes, and any additional charges will be clearly stated before you confirm your booking. Payments are made either directly to the service provider and the thing (servz'it never take a single penny  from customers its totally free of cost to browse and use), as specified at the time of booking.</p>
+      <p style="font-size: 18px; line-height: 1.6;"><strong>Payment Methods:</strong> We accept payments through credit/debit cards, mobile wallets, and other methods available on the platform.</p>
+  
+      <h2 style="font-size: 24px; color: #ffb;">7. Data Privacy</h2>
+      <p style="font-size: 18px; line-height: 1.6;">By using Servz'it, you consent to the collection, use, and sharing of your personal data in accordance with our Privacy Policy. We take reasonable steps to protect your data but are not liable for any unauthorized access or disclosure.</p>
+  
+      <h2 style="font-size: 24px; color: #ffb;">8. Responsibilities of Service Providers</h2>
+      <p style="font-size: 18px; line-height: 1.6;">Servz'it does not employ the service providers listed on our platform and is not responsible for the quality, performance, or delivery of services. Service providers are independent contractors, and any issues or disputes related to the service should be directed to the service provider.</p>
+  
+      <h2 style="font-size: 24px; color: #ffb;">9. Limitation of Liability</h2>
+      <p style="font-size: 18px; line-height: 1.6;">Servz'it is not responsible for any loss, damage, or injury resulting from...</p>
+    </section>
+  </main>
+  
+
+
+  <!--<script>-->
+      
+  <!--  -- Handle form submission and fetch data-->
+  <!--  document.getElementById('search-form').addEventListener('submit', function(e) {-->
+  <!--    e.preventDefault();-->
+
+  <!--    const service = document.getElementById('service').value;-->
+  <!--    const address = document.getElementById('address').value;-->
+
+  <!--    -- Fetch data from PHP file with search parameters-->
+  <!--    fetch(`/search.php?service=${service}&address=${address}`)-->
+  <!--      .then(response => response.json())-->
+  <!--      .then(data => {-->
+  <!--        displayData(data);-->
+  <!--      })-->
+  <!--      .catch(error => {-->
+  <!--        console.error('Error fetching data:', error);-->
+  <!--      });-->
+  <!--  });-->
+
+  <!--  -- Function to display data on the page-->
+  <!--  function displayData(users) {-->
+  <!--    const container = document.getElementById('user-container');-->
+  <!--    container.innerHTML = ''; -- Clear previous content-->
+
+  <!--    if (users.length > 0) {-->
+  <!--      users.forEach(user => {-->
+  <!--        const div = document.createElement('div');-->
+  <!--        div.classList.add('data-item');-->
+  <!--        div.innerHTML = `-->
+  <!--          <p><strong>Name:</strong> ${user.name}</p>-->
+  <!--          <p><strong>Phone:</strong> ${user.phone}</p>-->
+  <!--          <p><strong>Service:</strong> ${user.service}</p>-->
+  <!--          <p><strong>Address:</strong> ${user.address}</p>-->
+  <!--          <p><strong>Business Hours:</strong> ${user.business_hours}</p>-->
+  <!--        `;-->
+  <!--        container.appendChild(div);-->
+  <!--      });-->
+  <!--    } else {-->
+  <!--      container.innerHTML = '<p>No users found.</p>';-->
+  <!--    }-->
+  <!--  }-->
+    
+  <!--</script>-->
+
+
+    <!-- Footer -->
+<footer style="
+  background-color: transparent;
+  color: white;
+  text-align: center;
+  padding: 0px;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  z-index: 1000;
+">
+  <p style="font-size: 10px; letter-spacing: 2px; margin: 0;">
+    All Rights Reserved © 2024<span id="current-year"></span> 
+    | <br>
+    <a href="mailto:admin@servzit.live" style="color: white; text-decoration: none;">
+      <i class="fa fa-envelope" aria-hidden="true"></i> admin@servzit.live
+    </a>
+  </p>
+</footer>
+
+  </body>
+</html>
